@@ -1,10 +1,34 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { useAppStore } from '../stores/useAppStore';
+import { RecipeType } from '../types';
 
 export default function Modal() {
 
     const { modal, closeModal, selectedRecipe } = useAppStore()
+
+    const renderIngredients = () => {
+
+        const ingredients: JSX.Element[] = []
+
+        for (let i = 1; i <= 6; i++) {
+            const ingredient = selectedRecipe[`strIngredient${i}` as keyof RecipeType]
+            const measure = selectedRecipe[`strMeasure${i}` as keyof RecipeType]
+
+            if (ingredient && measure) {
+                ingredients.push(
+                    <li key={i}
+                        className='text-lg font-normal'
+                    >
+                        {ingredient} - {measure}
+                    </li>
+                )
+            }
+
+        }
+        return ingredients
+    }
+
 
     return (
         <>
@@ -43,12 +67,30 @@ export default function Modal() {
                                     <Dialog.Title as="h3" className="text-gray-900 text-2xl font-extrabold my-5">
                                         Ingredientes y Cantidades:
                                     </Dialog.Title>
+
+                                    {renderIngredients()}
+
                                     <Dialog.Title as="h3" className="text-gray-900 text-2xl font-extrabold my-5">
                                         Instrucciones:
                                     </Dialog.Title>
 
                                     <p className='text-lg'>{selectedRecipe.strInstructions}</p>
-
+                                    <div className='mt-5 flex justify-between gap-4'>
+                                        <button
+                                            type='button'
+                                            className='w-full rounded p-3 bg-gray-600 font-bold uppercase text-white shadow hover:bg-gray-600'
+                                            onClick={closeModal}
+                                        >
+                                            Cerrar
+                                        </button>
+                                        <button
+                                            type='button'
+                                            className='w-full rounded p-3 bg-orange-500 font-bold uppercase text-white shadow hover:bg-orange-700'
+                                            
+                                        >
+                                            Agregar Favoritos
+                                        </button>
+                                    </div>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
