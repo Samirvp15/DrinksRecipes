@@ -15,7 +15,7 @@ export default function Header() {
     const { pathname } = useLocation()
     const isHome = useMemo(() => pathname === '/', [pathname])
 
-    const { fetchCategories, categories: { drinks }, searchRecipes} = useAppStore()
+    const { fetchCategories, categories: { drinks }, searchRecipes, showNotification } = useAppStore()
 
 
 
@@ -23,7 +23,7 @@ export default function Header() {
         fetchCategories()
     }, [])
 
-    const handleChange = (item: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>)=>{
+    const handleChange = (item: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         setSearchFilters({
             ...searchFilters,
             [item.target.name]: item.target.value
@@ -34,15 +34,18 @@ export default function Header() {
         e.preventDefault()
 
         //VALIDAR CAMPOS VACIOS
-        if(Object.values(searchFilters).includes('')){
-            console.log('xssss')
+        if (Object.values(searchFilters).includes('')) {
+            showNotification({
+                text: 'Todos los campos son obligatorios!',
+                error: true
+            })
             return
         }
 
         searchRecipes(searchFilters)
 
     }
-    
+
 
     return (
         <header className={isHome ? 'bg-header bg-center bg-cover' : 'bg-blue-950'}>
@@ -63,10 +66,10 @@ export default function Header() {
                     </nav>
                 </div>
                 {isHome && (
-                    <form action="" 
-                    className="md:w-1/2 2xl:w-1/3 p-10
+                    <form action=""
+                        className="md:w-1/2 2xl:w-1/3 p-10
                     bg-blue-600 my-32 rounded-lg shadow space-y-6"
-                    onSubmit={handleSubmit}
+                        onSubmit={handleSubmit}
                     >
                         <div className="space-y-4">
                             <label htmlFor="ingredient"

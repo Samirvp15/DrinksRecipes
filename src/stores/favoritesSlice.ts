@@ -23,7 +23,7 @@ export const createFavoritesSlice: StateCreator<FavoritesSliceType & RecipesSlic
             }))
 
             createNotificationSlice(set,get,api).showNotification({
-                text: 'Se elimino de Favoritos',
+                text: `${recipe.strDrink} se elimino de Favoritos`,
                 error: false
             })
         } else {
@@ -31,7 +31,7 @@ export const createFavoritesSlice: StateCreator<FavoritesSliceType & RecipesSlic
                 favorites: [...state.favorites, recipe]
             }))
             createNotificationSlice(set,get,api).showNotification({
-                text: 'Se agrego a Favoritos',
+                text: `${recipe.strDrink} se agrego a Favoritos`,
                 error: false
             })
         }
